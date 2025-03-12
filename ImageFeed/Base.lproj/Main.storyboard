@@ -32,17 +32,6 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="361" height="200"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gup-vl-ZGP" userLabel="Favorite">
-                                                    <rect key="frame" x="293" y="0.0" width="68" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="2CB-GK-cCj"/>
-                                                        <constraint firstAttribute="height" constant="44" id="3K6-fc-6qB"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="FavoriteActive">
-                                                        <backgroundConfiguration key="background"/>
-                                                    </buttonConfiguration>
-                                                </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uha-Eo-xhr" userLabel="DateLabelContainer">
                                                     <rect key="frame" x="0.0" y="170" width="361" height="30"/>
                                                     <subviews>
@@ -64,17 +53,25 @@
                                                         <constraint firstItem="UGX-8L-PE9" firstAttribute="top" secondItem="uha-Eo-xhr" secondAttribute="top" constant="4" id="j7H-oJ-hOf"/>
                                                     </constraints>
                                                 </view>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CFs-w5-ECI">
+                                                    <rect key="frame" x="317" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="83t-gw-I9z"/>
+                                                        <constraint firstAttribute="width" constant="44" id="G06-fD-Wwf"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="FavoriteActive"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="tB3-7x-bqt" secondAttribute="trailing" id="3G4-bY-GDC"/>
-                                                <constraint firstAttribute="trailing" secondItem="Gup-vl-ZGP" secondAttribute="trailing" id="8l9-hI-4R7"/>
                                                 <constraint firstAttribute="trailing" secondItem="uha-Eo-xhr" secondAttribute="trailing" id="90J-Ds-akH"/>
+                                                <constraint firstAttribute="trailing" secondItem="CFs-w5-ECI" secondAttribute="trailing" id="AVj-fT-nJJ"/>
+                                                <constraint firstItem="CFs-w5-ECI" firstAttribute="top" secondItem="5w7-8a-hUo" secondAttribute="top" id="SyK-YJ-wvt"/>
                                                 <constraint firstAttribute="bottom" secondItem="uha-Eo-xhr" secondAttribute="bottom" id="aBF-8v-Ai3"/>
                                                 <constraint firstItem="uha-Eo-xhr" firstAttribute="leading" secondItem="5w7-8a-hUo" secondAttribute="leading" id="bYP-XD-KQk"/>
                                                 <constraint firstItem="tB3-7x-bqt" firstAttribute="top" secondItem="5w7-8a-hUo" secondAttribute="top" id="dgS-gA-ldi"/>
-                                                <constraint firstItem="Gup-vl-ZGP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5w7-8a-hUo" secondAttribute="leading" constant="20" symbolic="YES" id="fZh-7o-KtM"/>
                                                 <constraint firstItem="tB3-7x-bqt" firstAttribute="leading" secondItem="5w7-8a-hUo" secondAttribute="leading" id="gD4-nE-saX"/>
-                                                <constraint firstItem="Gup-vl-ZGP" firstAttribute="top" secondItem="5w7-8a-hUo" secondAttribute="top" id="iaf-Ls-m7l"/>
                                                 <constraint firstAttribute="bottom" secondItem="tB3-7x-bqt" secondAttribute="bottom" id="kD0-Gj-MKI"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -82,7 +79,7 @@
                                         <connections>
                                             <outlet property="dateLabel" destination="UGX-8L-PE9" id="AMV-6B-kEu"/>
                                             <outlet property="dateLabelContainer" destination="uha-Eo-xhr" id="SyF-EB-732"/>
-                                            <outlet property="favoriteButton" destination="Gup-vl-ZGP" id="PzH-8Z-9xg"/>
+                                            <outlet property="favoriteButton" destination="CFs-w5-ECI" id="lbL-vQ-ccP"/>
                                             <outlet property="tableCellImage" destination="tB3-7x-bqt" id="tH6-Q5-4Vr"/>
                                         </connections>
                                     </tableViewCell>

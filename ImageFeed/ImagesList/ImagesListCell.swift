@@ -9,12 +9,19 @@ import UIKit
 
 
 final class ImagesListCell: UITableViewCell {
+    
+    // MARK: - Static properties
+    
     public static let reuseIdentifier: String = "ImagesListCell"
+    
+    // MARK: - @IBOutlet properties
     
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var tableCellImage: UIImageView!
     @IBOutlet weak var dateLabelContainer: UIView!
     @IBOutlet weak var dateLabel: UILabel!
+    
+    // MARK: - @IBOutlet properties
     
     override func layoutSubviews() {
         super.layoutSubviews()
