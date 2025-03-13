@@ -22,10 +22,6 @@ final class ImagesListViewController: UIViewController {
         return formatter
     }()
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    private let gradientColors = [
-        UIColor(red: 0.102, green: 0.105, blue: 0.133, alpha: 0.0).cgColor,
-        UIColor(red: 0.102, green: 0.105, blue: 0.133, alpha: 0.5).cgColor
-    ]
     
     // MARK: - View controller lifecycle methods
     
@@ -42,12 +38,7 @@ final class ImagesListViewController: UIViewController {
         cell.tableCellImage.image = UIImage(named: photosName[indexPath.row])
         cell.dateLabel?.text = dateFormatter.string(from: .init())
         cell.favoriteButton.imageView?.image = UIImage(named: indexPath.row % 2 == 0 ? "FavoriteActive" : "FavoriteInactive")
-        if cell.dateLabelContainer.layer.sublayers?.count ?? 0 < 2 {
-            let gradient = CAGradientLayer()
-            gradient.frame = cell.dateLabelContainer.bounds
-            gradient.colors = gradientColors
-            cell.dateLabelContainer.layer.insertSublayer(gradient, at: 0)
-        }
+
         cell.selectionStyle = .none;
     }
 }
