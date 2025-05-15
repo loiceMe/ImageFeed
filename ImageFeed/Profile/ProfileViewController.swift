@@ -25,7 +25,7 @@ final class ProfileViewController: UIViewController {
         return stackView
     }()
     private lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "AvatarPlaceholder"))
+        let imageView = UIImageView(image: UIImage(named: "Avatar"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
