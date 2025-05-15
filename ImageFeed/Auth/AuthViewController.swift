@@ -9,7 +9,7 @@ import UIKit
 final class AuthViewController: UIViewController {
     // MARK: - public properties
     
-    var delegate: AuthViewControllerDelegate?
+    weak var delegate: AuthViewControllerDelegate?
     
     // MARK: - private properties
     
@@ -41,7 +41,9 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        OAuth2Service.shared.fetchOAuthToken(code: code) { result in
+        OAuth2Service.shared.fetchOAuthToken(code: code) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let data):
                 do {

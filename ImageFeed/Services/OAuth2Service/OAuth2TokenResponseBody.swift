@@ -5,7 +5,7 @@
 //  Created by   Дмитрий Кривенко on 22.04.2025.
 //
 
-struct OAuth2TokenResponseBody: Codable {
+struct OAuth2TokenResponseBody: Decodable {
     let accessToken: String
     let tokenType: String
     let scope: String
