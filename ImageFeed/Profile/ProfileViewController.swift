@@ -5,6 +5,7 @@
 //  Created by   Дмитрий Кривенко on 14.03.2025.
 //
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -62,16 +63,59 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    // MARK: - override methods
+    private let profileService = ProfileService.shared
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    // MARK: - override methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBlack
         view.addSubview(contentStackView)
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             contentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             contentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
+        
+        if let avatarURL = ProfileImageService.shared.avatarURL,
+           let url = URL(string: avatarURL) {
+        }
+        
+        updateProfileDetails()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else {
+                    self?.profileImageView.image = UIImage(named: "NoAvatar")
+                    return
+                }
+                self.updateAvatar()
+            }
+    }
+    
+    // MARK: - Private methods
+    
+    private func updateProfileDetails() {
+        guard let profile = profileService.profile else { return }
+        
+        accountNameLabel.text = profile.loginName
+        nameLabel.text = profile.name
+        bioLabel.text = profile.bio
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "NoAvatar"))
     }
 }
