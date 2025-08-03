@@ -22,8 +22,6 @@ final class ProfileImageService {
     
     private(set) var avatarURL: String?
     
-    // MARK: - private properties
-    
     private var task: URLSessionTask?
     
     // MARK: - public methods
