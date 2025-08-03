@@ -21,6 +21,10 @@ final class OAuth2Service {
     
     private var lastCode: String?
     
+    // MARK: - init
+    
+    private init() {}
+    
     // MARK: - public methods
     
     func fetchOAuthToken(code: String, completion: @escaping (_ result: Result<OAuth2TokenResponseBody, Error>) -> Void) {
@@ -56,8 +60,6 @@ final class OAuth2Service {
     }
     
     // MARK: - private methods
-    
-    private init() {}
     
     private func getTokenRequest(code: String) -> URLRequest? {
         var components = URLComponents()

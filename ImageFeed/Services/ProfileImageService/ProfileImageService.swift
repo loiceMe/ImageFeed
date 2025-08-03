@@ -26,6 +26,10 @@ final class ProfileImageService {
     
     private var task: URLSessionTask?
     
+    // MARK: - init
+    
+    private init() {}
+    
     // MARK: - public methods
     
     func fetchProfileImageURL(authToken: String, username: String, completion: @escaping (_ result: Result<UserResult, Error>) -> Void) {
@@ -60,8 +64,6 @@ final class ProfileImageService {
     }
     
     // MARK: - private methods
-    
-    private init() {}
     
     private func getProfileRequest(authToken: String, username: String) -> URLRequest? {
         var components = URLComponents()
