@@ -47,7 +47,7 @@ final class ProfileService {
     
     func responseToProfile(response: ProfileResponseBody) {
         self.profile = Profile(username: response.username,
-                       name: "\(response.firstName) \(response.lastName)",
+                       name: "\(response.firstName ?? "") \(response.lastName ?? "")",
                        loginName: "@\(response.username)",
                        bio: response.bio ?? "<не заполнено>")
     }

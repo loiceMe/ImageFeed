@@ -59,7 +59,7 @@ final class SplashViewController: UIViewController {
                 print("[fetchProfile]: \(error)")
                 let alert = UIAlertController()
                 alert.message = "Ошибка получения профиля"
-                alert.present(self, animated: true)
+                present(alert, animated: true)
                 break
             }
         }
