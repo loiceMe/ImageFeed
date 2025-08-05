@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SplashViewController: UIViewController {
+final class SplashViewController: UIViewController {
     // MARK: - private properties
     
     private let storage = OAuth2TokenStorage()
@@ -40,10 +40,7 @@ class SplashViewController: UIViewController {
     }
     
     private func fetchProfile(_ token: String) {
-        UIBlockingProgressHUD.show()
         profileService.fetchProfile(authToken: token) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
-
             guard let self = self else { return }
 
             switch result {
@@ -62,7 +59,7 @@ class SplashViewController: UIViewController {
                 print("[fetchProfile]: \(error)")
                 let alert = UIAlertController()
                 alert.message = "Ошибка получения профиля"
-                alert.present(self, animated: true)
+                present(alert, animated: true)
                 break
             }
         }
