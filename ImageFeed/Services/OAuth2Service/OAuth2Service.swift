@@ -6,28 +6,60 @@
 //
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     // MARK: - static properties
     
     static let shared = OAuth2Service()
     
+    // MARK: - private properties
+    
+    private var task: URLSessionTask?
+    
+    private var lastCode: String?
+    
+    // MARK: - init
+    
+    private init() {}
+    
     // MARK: - public methods
     
-    func fetchOAuthToken(code: String, completion: @escaping (_ result: Result<Data, Error>) -> Void) {
+    func fetchOAuthToken(code: String, completion: @escaping (_ result: Result<OAuth2TokenResponseBody, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        if task != nil {
+            if code != lastCode {
+                task?.cancel()
+            } else {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        } else {
+            if lastCode == code {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        }
+        lastCode = code
+        
         guard let request = getTokenRequest(code: code) else {
-            print("Empty token request")
+            completion(.failure(AuthServiceError.invalidRequest))
             return
         }
-        let task = URLSession.shared.data(for: request, completion: { result in
+
+        let task = URLSession.shared.objectTask(for: request,
+                                                completion: { [weak self] (result: Result<OAuth2TokenResponseBody, Error>) in
             completion(result)
+            self?.task = nil
+            self?.lastCode = nil
         })
-        
+        self.task = task
         task.resume()
     }
     
     // MARK: - private methods
-    
-    private init() {}
     
     private func getTokenRequest(code: String) -> URLRequest? {
         var components = URLComponents()

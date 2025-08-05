@@ -17,26 +17,41 @@ extension URLSession {
         for request: URLRequest,
         completion: @escaping (Result<Data, Error>) -> Void
     ) -> URLSessionTask {
-        let fulfillCompletionOnTheMainThread: (Result<Data, Error>) -> Void = { result in
+        let completeOnMain: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
         }
-        
-        let task = dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data, let response = response, let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200 ..< 300 ~= statusCode {
-                    fulfillCompletionOnTheMainThread(.success(data))
-                } else {
-                    fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
-                }
-            } else if let error = error {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
-            } else {
-                fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
+
+        let task = dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("[URLSession.data]: 🚫 Request error — \(error.localizedDescription)")
+                completeOnMain(.failure(NetworkError.urlRequestError(error)))
+                return
             }
-        })
-        
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("[URLSession.data]: 🚫 Invalid response object")
+                completeOnMain(.failure(NetworkError.urlSessionError))
+                return
+            }
+
+            let statusCode = httpResponse.statusCode
+            if !(200..<300).contains(statusCode) {
+                print("[URLSession.data]: ❗️HTTP Error \(statusCode) — \(request.url?.absoluteString ?? "no URL")")
+                completeOnMain(.failure(NetworkError.httpStatusCode(statusCode)))
+                return
+            }
+
+            guard let data = data else {
+                print("[URLSession.data]: 🚫 Empty data despite success status code")
+                completeOnMain(.failure(NetworkError.urlSessionError))
+                return
+            }
+
+            completeOnMain(.success(data))
+        }
+
         return task
     }
 }
