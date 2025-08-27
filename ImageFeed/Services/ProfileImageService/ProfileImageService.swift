@@ -80,3 +80,9 @@ final class ProfileImageService {
         return request
     }
 }
+
+extension ProfileImageService: DataResettable {
+    func resetData() {
+        avatarURL = nil
+    }
+}

@@ -54,14 +54,17 @@
                                                         <constraint firstItem="UGX-8L-PE9" firstAttribute="top" secondItem="uha-Eo-xhr" secondAttribute="top" constant="4" id="j7H-oJ-hOf"/>
                                                     </constraints>
                                                 </view>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CFs-w5-ECI">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CFs-w5-ECI" userLabel="Like Button">
                                                     <rect key="frame" x="317" y="0.0" width="44" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="83t-gw-I9z"/>
                                                         <constraint firstAttribute="width" constant="44" id="G06-fD-Wwf"/>
                                                     </constraints>
                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="FavoriteActive"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="FavoriteInactive"/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked" destination="f5T-t1-ZuO" eventType="touchUpInside" id="DQG-6A-mnM"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -80,8 +83,8 @@
                                         <connections>
                                             <outlet property="dateLabel" destination="UGX-8L-PE9" id="AMV-6B-kEu"/>
                                             <outlet property="dateLabelContainer" destination="uha-Eo-xhr" id="SyF-EB-732"/>
-                                            <outlet property="favoriteButton" destination="CFs-w5-ECI" id="lbL-vQ-ccP"/>
-                                            <outlet property="tableCellImage" destination="tB3-7x-bqt" id="tH6-Q5-4Vr"/>
+                                            <outlet property="likeButton" destination="CFs-w5-ECI" id="TAh-PW-YDh"/>
+                                            <outlet property="tableCellImageView" destination="tB3-7x-bqt" id="NLp-bD-UzP"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -196,7 +199,7 @@
         <!--Splash View Controller-->
         <scene sceneID="2GQ-hC-xaf">
             <objects>
-                <viewController id="frz-Az-ePV" userLabel="Splash View Controller" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashViewController" id="frz-Az-ePV" userLabel="Splash View Controller" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xuj-xU-XbT">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -223,8 +226,8 @@
         <!--Auth View Controller-->
         <scene sceneID="DjR-2q-lA6">
             <objects>
-                <viewController id="qS0-I8-2UL" userLabel="Auth View Controller" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="wLW-dU-uqE">
+                <viewController storyboardIdentifier="AuthViewController" id="qS0-I8-2UL" userLabel="Auth View Controller" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" restorationIdentifier="AuthViewController" id="wLW-dU-uqE" customClass="AutoSizingTableViewCell">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -348,7 +351,7 @@
         <image name="0" width="1600" height="1059"/>
         <image name="AuthLogo" width="60" height="60"/>
         <image name="Backward" width="24" height="24"/>
-        <image name="FavoriteActive" width="44" height="44"/>
+        <image name="FavoriteInactive" width="44" height="44"/>
         <image name="LaunchScreenLogo" width="75" height="78"/>
         <image name="Share" width="51" height="51"/>
         <image name="TabImagesNoActive" width="30" height="30"/>

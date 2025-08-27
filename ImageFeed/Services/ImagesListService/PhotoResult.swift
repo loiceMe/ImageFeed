@@ -7,12 +7,13 @@
 
 struct PhotoResult: Decodable {
     let id: String
-    let createdAt: String
+    let createdAt: String?
     let width: Int
     let height: Int
     let likes: Int
     let likedByUser: Bool
-    let description: String
+    let description: String?
+    let urls: UrlsResult
     
     private enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -22,5 +23,6 @@ struct PhotoResult: Decodable {
         case likes = "likes"
         case likedByUser = "liked_by_user"
         case description = "description"
+        case urls = "urls"
     }
 }
