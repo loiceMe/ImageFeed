@@ -22,8 +22,6 @@ final class ProfileImageService {
     
     private(set) var avatarURL: String?
     
-    // MARK: - private properties
-    
     private var task: URLSessionTask?
     
     // MARK: - init
@@ -80,5 +78,11 @@ final class ProfileImageService {
         request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         
         return request
+    }
+}
+
+extension ProfileImageService: DataResettable {
+    func resetData() {
+        avatarURL = nil
     }
 }

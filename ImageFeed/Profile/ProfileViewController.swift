@@ -36,6 +36,7 @@ final class ProfileViewController: UIViewController {
         button.setImage(buttonImage, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .none
+        button.addTarget(self, action: #selector(onPressExitButton), for: .touchUpInside)
         return button
     }()
     private lazy var nameLabel: UILabel = {
@@ -66,6 +67,8 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     
     private var profileImageServiceObserver: NSObjectProtocol?
+    
+    private let profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - override methods
 
@@ -117,5 +120,28 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
         profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "NoAvatar"))
+    }
+    
+    @objc func onPressExitButton() {
+        let alertController = UIAlertController(title: "Уходите?",
+                                                message: "Уверены, что хотите выйти",
+                                                preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        let logoutAction = UIAlertAction(title: "Да", style: .default) {_ in
+            self.profileLogoutService.logout()
+            
+            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+                let splashViewController = UIStoryboard(name: "Main", bundle: .main)
+                    .instantiateViewController(withIdentifier: "SplashViewController")
+                window.rootViewController = splashViewController
+            }
+        }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(logoutAction)
+        alertController.preferredAction = cancelAction
+        
+        present(alertController, animated: true, completion: nil)
     }
 }

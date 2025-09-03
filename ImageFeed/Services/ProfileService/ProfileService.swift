@@ -73,3 +73,9 @@ final class ProfileService {
         return request
     }
 }
+
+extension ProfileService: DataResettable {
+    func resetData() {
+        profile = nil
+    }
+}

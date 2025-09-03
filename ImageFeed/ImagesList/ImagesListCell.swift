@@ -13,6 +13,10 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - Static properties
     
     public static let reuseIdentifier: String = "ImagesListCell"
+    
+    // MARK: - Public properties
+    
+    weak var delegate: ImagesListCellDelegate?
 
     // MARK: - Private properties
     
@@ -23,12 +27,24 @@ final class ImagesListCell: UITableViewCell {
     
     private let gradient = CAGradientLayer()
     
+    private var isLiked: Bool = false {
+        didSet {
+            updateLikeButton()
+        }
+    }
+    
     // MARK: - @IBOutlet properties
     
-    @IBOutlet weak var favoriteButton: UIButton!
-    @IBOutlet weak var tableCellImage: UIImageView!
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var tableCellImageView: UIImageView!
     @IBOutlet weak var dateLabelContainer: UIView!
     @IBOutlet weak var dateLabel: UILabel!
+    
+    // MARK: - @IBAction properties
+    
+    @IBAction private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
+    }
     
     // MARK: - Override methods
     
@@ -42,8 +58,24 @@ final class ImagesListCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        tableCellImageView.kf.cancelDownloadTask()
+        tableCellImageView.image = nil
+        dateLabel.text = ""
         dateLabelContainer.layer.sublayers?.removeAll(where: { layer in
             gradient == layer
         })
+        
+        likeButton.imageView?.image = UIImage(named: "FavoriteInactive")
+    }
+    
+    func setIsLiked(_ liked: Bool) {
+        isLiked = liked
+    }
+    
+    private func updateLikeButton() {
+        let imageName = isLiked ? "FavoriteActive" : "FavoriteInactive"
+        likeButton.setImage(UIImage(named: imageName), for: .normal)
     }
 }

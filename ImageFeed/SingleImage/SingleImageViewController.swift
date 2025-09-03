@@ -10,20 +10,12 @@ final class SingleImageViewController: UIViewController {
     
     // MARK: - public properties
     
-    var image: UIImage? {
-        didSet {
-            guard isViewLoaded, let image else { return }
-            
-            imageView.image = image
-            imageView.frame.size = image.size
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
+    var imageURL: URL?
     
     // MARK: - outlets
     
     @IBOutlet private weak var scrollView: UIScrollView!
-    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet var imageView: UIImageView!
     
     // MARK: - overrides methods
     
@@ -33,10 +25,20 @@ final class SingleImageViewController: UIViewController {
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
-        guard let image else { return }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image: image)
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageURL, completionHandler: { [weak self] result in
+            switch result {
+            case .success(let imageResult):
+                self?.imageView.image = imageResult.image
+                self?.imageView.frame.size = imageResult.image.size
+                self?.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                break
+            case .failure(let error):
+                print("[ImagesListViewController.configureCell]: 🚫 Set image error — \(error.localizedDescription)")
+                break
+            }
+            UIBlockingProgressHUD.dismiss()
+        })
     }
     
     // MARK: - actions
@@ -46,7 +48,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     @IBAction private func didTapShareButton(_ sender: Any) {
-        guard let image else { return }
+        guard let image = self.imageView.image else { return }
         let activityViewController = UIActivityViewController.init(activityItems: [image], applicationActivities: nil);
         present(activityViewController, animated: true)
     }
