@@ -27,12 +27,6 @@ final class ImagesListCell: UITableViewCell {
     
     private let gradient = CAGradientLayer()
     
-    private var isLiked: Bool = false {
-        didSet {
-            updateLikeButton()
-        }
-    }
-    
     // MARK: - @IBOutlet properties
     
     @IBOutlet weak var likeButton: UIButton!
@@ -66,16 +60,25 @@ final class ImagesListCell: UITableViewCell {
         dateLabelContainer.layer.sublayers?.removeAll(where: { layer in
             gradient == layer
         })
-        
-        likeButton.imageView?.image = UIImage(named: "FavoriteInactive")
     }
     
-    func setIsLiked(_ liked: Bool) {
-        isLiked = liked
-    }
-    
-    private func updateLikeButton() {
-        let imageName = isLiked ? "FavoriteActive" : "FavoriteInactive"
-        likeButton.setImage(UIImage(named: imageName), for: .normal)
+    func configure(with imageURL: URL?, liked: Bool, dateText: String?) {
+        contentView.layer.cornerRadius = 16
+        if let imageUrl = imageURL {
+            tableCellImageView?.kf.setImage(with: imageUrl, completionHandler: { [weak self] result in
+                switch result {
+                case .success(let imageResult):
+                    self?.tableCellImageView?.image = imageResult.image
+                    break
+                case .failure(let error):
+                    print("[ImagesListViewController.configureCell]: 🚫 Set image error — \(error.localizedDescription)")
+                    break
+                }
+            })
+        }
+        dateLabel?.text = dateText
+        let likeImage = liked ? "FavoriteActive" : "FavoriteInactive"
+        likeButton.setImage(UIImage(named: likeImage), for: .normal)
+        selectionStyle = .none;
     }
 }

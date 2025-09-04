@@ -7,8 +7,7 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
-    
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     // MARK: - private properties
     
     private lazy var contentStackView: UIStackView = {
@@ -37,6 +36,7 @@ final class ProfileViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .none
         button.addTarget(self, action: #selector(onPressExitButton), for: .touchUpInside)
+        button.accessibilityIdentifier = "logout-button"
         return button
     }()
     private lazy var nameLabel: UILabel = {
@@ -64,11 +64,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let profileService = ProfileService.shared
-    
-    private var profileImageServiceObserver: NSObjectProtocol?
-    
-    private let profileLogoutService = ProfileLogoutService.shared
+    var presenter: ProfileViewPresenterProtocol?
     
     // MARK: - override methods
 
@@ -87,37 +83,19 @@ final class ProfileViewController: UIViewController {
            let url = URL(string: avatarURL) {
         }
         
-        updateProfileDetails()
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else {
-                    self?.profileImageView.image = UIImage(named: "NoAvatar")
-                    return
-                }
-                self.updateAvatar()
-            }
+        presenter?.viewDidLoad()
     }
     
-    // MARK: - Private methods
-    
-    private func updateProfileDetails() {
-        guard let profile = profileService.profile else { return }
+    func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
         
         accountNameLabel.text = profile.loginName
         nameLabel.text = profile.name
         bioLabel.text = profile.bio
-        updateAvatar()
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
+    func updateAvatar(avatarURL: String) {
+        guard let url = URL(string: avatarURL)
         else { return }
         profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "NoAvatar"))
     }
@@ -129,7 +107,8 @@ final class ProfileViewController: UIViewController {
         
         let cancelAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
         let logoutAction = UIAlertAction(title: "Да", style: .default) {_ in
-            self.profileLogoutService.logout()
+            
+            self.presenter?.logout()
             
             if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 let splashViewController = UIStoryboard(name: "Main", bundle: .main)
@@ -144,4 +123,11 @@ final class ProfileViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+}
+
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    
+    func updateAvatar(avatarURL: String)
+    func updateProfileDetails(profile: Profile?)
 }

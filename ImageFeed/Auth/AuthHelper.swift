@@ -1,0 +1,54 @@
+//
+//  AuthHelper.swift
+//  ImageFeed
+//
+//  Created by   Дмитрий Кривенко on 02.09.2025.
+//
+
+import Foundation
+
+final class AuthHelper: AuthHelperProtocol {
+    let configuration: AuthConfiguration
+
+    init(configuration: AuthConfiguration = .standard) {
+        self.configuration = configuration
+    }
+    
+    func authRequest() -> URLRequest? {
+        guard let url = authURL() else { return nil }
+        
+        return URLRequest(url: url)
+    }
+
+    func authURL() -> URL? {
+        var urlComponents = URLComponents()
+        
+        urlComponents.path = configuration.authURLString
+        
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: configuration.accessKey),
+            URLQueryItem(name: "redirect_uri", value: configuration.redirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope", value: configuration.accessScope)
+        ]
+        
+        return urlComponents.url(relativeTo: Constants.defaultBaseURL)
+    }
+    
+    func code(from url: URL) -> String? {
+        if let urlComponents = URLComponents(string: url.absoluteString),
+           urlComponents.path == "/oauth/authorize/native",
+           let items = urlComponents.queryItems,
+           let codeItem = items.first(where: { $0.name == "code" })
+        {
+            return codeItem.value
+        } else {
+            return nil
+        }
+    } 
+}
+
+protocol AuthHelperProtocol {
+    func authRequest() -> URLRequest?
+    func code(from url: URL) -> String?
+}

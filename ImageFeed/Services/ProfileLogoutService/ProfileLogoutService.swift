@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-final class ProfileLogoutService {
+final class ProfileLogoutService: ProfileLogoutServiceProtocol {
     static let shared = ProfileLogoutService()
     
     private let storage = OAuth2TokenStorage()
@@ -40,4 +40,8 @@ final class ProfileLogoutService {
 
 protocol DataResettable {
     func resetData()
+}
+
+protocol ProfileLogoutServiceProtocol {
+    func logout()
 }
