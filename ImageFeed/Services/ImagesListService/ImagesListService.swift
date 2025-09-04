@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     // MARK: - static properties
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
@@ -37,14 +37,11 @@ class ImagesListService {
                 switch result {
                 case .success(let photosResult):
                     let newPhotos = self?.resultToPhotos(photosResult)
-                    
-                    DispatchQueue.main.async {
-                        self?.photos.append(contentsOf: newPhotos ?? [])
-                        self?.currentPageNumber += 1
-                        NotificationCenter.default.post(name: ImagesListService.didChangeNotification,
-                                                        object: self,
-                                                        userInfo: ["photos": self?.photos ?? []])
-                    }
+                    self?.photos.append(contentsOf: newPhotos ?? [])
+                    self?.currentPageNumber += 1
+                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification,
+                                                    object: self,
+                                                    userInfo: ["photos": self?.photos ?? []])
                     break
                 case .failure(let error):
                     print(error)
@@ -156,4 +153,11 @@ extension ImagesListService: DataResettable {
         photos = []
         currentPageNumber = 1
     }
+}
+
+public protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+    func fetchPhotosNextPage()
 }

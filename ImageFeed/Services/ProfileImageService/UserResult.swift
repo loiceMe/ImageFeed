@@ -5,7 +5,7 @@
 //  Created by   Дмитрий Кривенко on 24.05.2025.
 //
 
-struct UserResult: Decodable {
+public struct UserResult: Decodable {
     let profileImage: ProfileImage
     
     private enum CodingKeys: String, CodingKey {

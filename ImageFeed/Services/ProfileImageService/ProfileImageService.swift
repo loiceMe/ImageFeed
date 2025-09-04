@@ -11,7 +11,7 @@ enum ProfileImageServiceError: Error {
     case invalidRequest
 }
 
-final class ProfileImageService {
+final class ProfileImageService: ProfileImageServiceProtocol {
     // MARK: - static properties
     
     static let shared = ProfileImageService()
@@ -85,4 +85,10 @@ extension ProfileImageService: DataResettable {
     func resetData() {
         avatarURL = nil
     }
+}
+
+public protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    
+    func fetchProfileImageURL(authToken: String, username: String, completion: @escaping (_ result: Result<UserResult, Error>) -> Void)
 }
